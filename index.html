@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualização - Problema das 8 rainhas [Algoritmo Genético]</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" 
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <h1 class="title">Algoritmo Genético</h1>
+  <div class="config">
+    <div class="card">Tamanho da população <b id="tamPop"></b></div>
+    <div class="card">Taxa de Cruzamento <b id="tc"></b></div>
+    <div class="card">Taxa de Mutação <b id="tm"></b></div>
+    <div class="card">Núm. máximo de gerações <b id="numMaxGer"></b></div>
+    <div class="card">Núm. de execuções do alg <b id="numExecAlg"></b></div>
+  </div>
+  <div class="results">
+    <div class="card">
+      <h3>Núm. mín. de iterações</h3>
+      <table>
+        <tr>
+          <th>Média</th>
+          <td id="mediaIter">0</td>
+        </tr>
+        <tr>
+          <th>Desvio padrão</th>
+          <td id="desvioPadraoIter">0</td>
+        </tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Tempo de execução do algoritmo</h3>
+      <table>
+        <tr>
+          <th>Média</th>
+          <td id="mediaTempoExec">0</td>
+        </tr>
+        <tr>
+          <th>Desvio padrão</th>
+          <td id="desvioPadraoTempoExec">0</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="bestSolutions">
+    <h3 class="sectionTitle">5 melhores soluções</h3>
+    <div class="solutions">
+      <section class="container">
+        <section id="tab1" class="tabuleiro" style="--row-num: 8;">
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao">
+              <img class="rainhaTeste" src="./assets/rainha-xadrez.png" alt="">
+            </div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+        </section>
+        <h3 id="h1" class="valorHeuristica">h = 0</h3>
+      </section>
+      <section class="container">
+        <section id="tab2" class="tabuleiro" style="--row-num: 8;">
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao">
+              <img class="rainhaTeste" src="./assets/rainha-xadrez.png" alt="">
+            </div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+        </section>
+        <h3 id="h2" class="valorHeuristica">h = 0</h3>
+      </section>
+      <section class="container">
+        <section id="tab3" class="tabuleiro" style="--row-num: 8;">
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao">
+              <img class="rainhaTeste" src="./assets/rainha-xadrez.png" alt="">
+            </div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+        </section>
+        <h3 id="h3" class="valorHeuristica">h = 0</h3>
+      </section>
+      <section class="container">
+        <section id="tab4" class="tabuleiro" style="--row-num: 8;">
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao">
+              <img class="rainhaTeste" src="./assets/rainha-xadrez.png" alt="">
+            </div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+        </section>
+        <h3 id="h4" class="valorHeuristica">h = 0</h3>
+      </section>
+      <section class="container">
+        <section id="tab5" class="tabuleiro" style="--row-num: 8;">
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao">
+              <img class="rainhaTeste" src="./assets/rainha-xadrez.png" alt="">
+            </div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+          <div class="linha" style="--col-num: 8;">
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+            <div class="posicao"></div>
+          </div>
+        </section>
+        <h3 id="h5" class="valorHeuristica">h = 0</h3>
+      </section>
+    </div>
+  </div>
+  <button class="startBttn" type="button">Rodar algoritmo</button>
+
+  <div class="loading hide">
+    <div class="loadingCircle"></div>
+  </div>
+  <script src="./algoritmoGenetico.js"></script>
+</body>
+</html>
